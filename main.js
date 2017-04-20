@@ -1,3 +1,5 @@
-var server = require('./server.js')({port: 8080})
+const Game = require('./game.js')
+const Server = require('./server.js')
 
-var Game = require('./game.js')({server: server})
+const server = Server({port:8080})
+const game = new Game({server:server})
