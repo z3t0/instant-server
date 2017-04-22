@@ -1,30 +1,45 @@
-var server = require('http').createServer();
+var http = require('http')
 var socket = require('socket.io')
 var EventEmitter = require('eventemitter3')
 
-function Server (opts) {
-	var io = socket(server);
+function Server (opts, game) {
+  this.http = http.createServer()
+  this.io = socket(this.http)
 
-	var emitter = new EventEmitter()
+  this.emitter = new EventEmitter()
+  this.game = game
 
-	io.on('connection', function(client){
-		emitter.emit('connect', client)
+  this.port = opts.port || 3000
 
-		client.on('event', function(data){
-			emitter.emit('event', data)
-		});
+  this.io.on('connection', (client) => {
+    this.emitter.emit('connect', client)
 
-		client.on('disconnect', function(){
-			emitter.emit('disconnect', client)
-		});
-	});
+    client.on('event', (data) => {
+      this.emitter.emit('event', data)
+    })
 
-	server.listen(3000);
+    client.on('left', (data) => {
+      this.emitter.emit('left', client.id)
+    })
 
-	this.io = io
-	this.emitter = emitter
+    client.on('right', (data) => {
+      this.emitter.emit('right', client.id)
+    })
 
-	return this
+    client.on('up', (data) => {
+      this.emitter.emit('up', client.id)
+    })
+
+    client.on('down', (data) => {
+      this.emitter.emit('down', client.id)
+    })
+
+    client.on('disconnect', () => {
+      this.emitter.emit('disconnect', client)
+    })
+  })
+
+  this.http.listen(this.port)
 }
 
 module.exports = Server
