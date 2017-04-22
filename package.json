@@ -7,7 +7,8 @@
     "test": "./node_modules/.bin/nyc ./node_modules/.bin/mocha",
     "start": "./node_modules/.bin/nodemon main.js",
     "debug": "./node_modules/.bin/nodemon debug main.js",
-    "coverage": "nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls"
+    "coverage": "nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls",
+    "report": "nyc report --reporter=html npm test && open ./coverage/index.html" 
   },
   "repository": {
     "type": "git",

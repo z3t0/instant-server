@@ -14,10 +14,6 @@ function Server (opts, game) {
   this.io.on('connection', (client) => {
     this.emitter.emit('connect', client)
 
-    client.on('event', (data) => {
-      this.emitter.emit('event', data)
-    })
-
     client.on('left', (data) => {
       this.emitter.emit('left', client.id)
     })
