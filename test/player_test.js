@@ -34,7 +34,7 @@ describe('Player', function () {
     })
 
     it(`should have 'sizeY' property`, function (done) {
-      assert.property(player, 'sizeY')
+        assert.property(player, 'sizeY')
       done()
     })
 
@@ -55,15 +55,16 @@ describe('Player', function () {
   })
 
   describe(`functions`, function () {
-    it(`update (deltaTime)`, function (done) {
-      const deltaTime = 1
-      var x = player.x
-      var y = player.y
-      player.update(deltaTime)
+    it (`getPlayerInfo()`, function(done) {
+      var info = player.getPlayerInfo()
 
-      assert.equal(player.x, x + player.vx * player.speed)
-      assert.equal(player.y, y + player.vy * player.speed)
-
+      assert.equal(info.id, player.id, 'id is not 1')
+      assert.equal(info.x, player.x, 'x is not 0')
+      assert.equal(info.y, player.y, 'y is not 0')
+      assert.equal(info.sizeX, player.sizeX, 'sizeZ is not 0.05')
+      assert.equal(info.sizeY, player.sizeY, 'sizeY is not 0.05')
+      assert.equal(info.vx, player.vx, 'vx is not 0')
+      assert.equal(info.vy, player.vy, 'vx is not 1')
       done()
     })
 
@@ -79,6 +80,18 @@ describe('Player', function () {
       var vx = 100
       player.setVelocityX(vx)
       assert.equal(player.vx, vx)
+
+      done()
+    })
+
+    it(`update (deltaTime)`, function (done) {
+      const deltaTime = 1
+      var x = player.x
+      var y = player.y
+      player.update(deltaTime)
+
+      assert.equal(player.x, x + player.vx * player.speed)
+      assert.equal(player.y, y + player.vy * player.speed)
 
       done()
     })
