@@ -1,6 +1,5 @@
 // Game
 // Copyright Rafi Khan
-
 const gameloop = require('node-gameloop')
 
 const FRAMES_PER_SECOND = 10
@@ -11,7 +10,6 @@ class Game {
   constructor (opts) {
     console.log('Game started')
 
-    // TODO bind server to some useful variable
     this.server = opts.server.emitter
     this.players = {}
   }
@@ -46,7 +44,9 @@ class Game {
   }
 
   log (msg) {
-    console.log('Game > ' + msg)
+    var msg = `Game > ${msg}`
+    console.log(msg)
+    return msg
   }
 
   disconnectPlayer (data) {
@@ -55,8 +55,8 @@ class Game {
     this.log('Player disconnected : ' + data.client.id)
   }
 
-  newPlayer (client) {
-    var newPlayer = new Player({client: client})
+  newPlayer (wrapper) {
+    var newPlayer = new Player(wrapper)
     this.players[newPlayer.id] = newPlayer
 
     client.emit('registered', newPlayer.getPlayerInfo())
