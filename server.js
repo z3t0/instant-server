@@ -8,7 +8,7 @@ function Server (opts) {
 
   this.emitter = new EventEmitter()
 
-  this.port = opts.port || 3000
+  this.port = opts.port
 
   this.io.on('connection', (client) => {
     var wrapper = {}
