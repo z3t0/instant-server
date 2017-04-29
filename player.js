@@ -2,9 +2,9 @@ const color = require('random-hex')
 
 class Player {
   constructor (opts) {
-    this.client = opts.client
+    this.emit = opts.emit
 
-    this.id = this.client.id
+    this.id = opts.id
     this.x = 0
     this.y = 0
 
@@ -14,10 +14,14 @@ class Player {
     this.vx = 0
     this.vy = 1
 
-    this.speed = 10
+    this.speed = 30
     var c = color.generate()
     c = c.substring(1, c.length)
     this.color = parseInt(c, 16)
+  }
+
+  send(msg, data) {
+    this.emit(msg, data)
   }
 
   getPlayerInfo () {
@@ -43,7 +47,6 @@ class Player {
   update (deltaTime) {
     this.x += this.vx * this.speed * deltaTime
     this.y += this.vy * this.speed * deltaTime
-    console.log(deltaTime)
   }
   setVelocityY (vy) {
     this.vy = vy

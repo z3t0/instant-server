@@ -1,5 +1,6 @@
 var assert = require('chai').assert
 var io = require('socket.io-client')
+var sinon = require('sinon')
 
 const Player = require('../player.js')
 var client = {'id': 1}
@@ -8,10 +9,6 @@ describe('Player', function () {
   var player = new Player({client: client})
 
   describe('constructor', function () {
-    it(`should have 'client' property`, function (done) {
-      assert.property(player, 'client')
-      done()
-    })
 
     it(`should have 'id' property`, function (done) {
       assert.property(player, 'id')
@@ -29,7 +26,7 @@ describe('Player', function () {
     })
 
     it(`should have 'sizeX' property`, function (done) {
-      assert.property(player, 'client')
+      assert.property(player, 'sizeX')
       done()
     })
 
@@ -52,19 +49,31 @@ describe('Player', function () {
       assert.property(player, 'color')
       done()
     })
-  })
 
-  describe(`functions`, function () {
-    it (`getPlayerInfo()`, function(done) {
-      var info = player.getPlayerInfo()
+    it(`send(msg, data)`, function(done) {
+      let spy = sinon.spy()
+      player.emit = spy
 
-      assert.equal(info.id, player.id, 'id is not 1')
-      assert.equal(info.x, player.x, 'x is not 0')
-      assert.equal(info.y, player.y, 'y is not 0')
-      assert.equal(info.sizeX, player.sizeX, 'sizeZ is not 0.05')
-      assert.equal(info.sizeY, player.sizeY, 'sizeY is not 0.05')
-      assert.equal(info.vx, player.vx, 'vx is not 0')
-      assert.equal(info.vy, player.vy, 'vx is not 1')
+      player.send('test', 'data')
+      assert(player.emit.calledOnce, 'emit not called')
+      assert(spy.calledWithExactly('test', 'data'))
+
+      done()
+    })
+
+    it(`getPlayerInfo()`, function(done) {
+      let info = player.getPlayerInfo()
+
+      assert.property(player, 'id', 'getPlayerInfo() returns id')
+      assert.property(player, 'x', 'getPlayerInfo() returns x')
+      assert.property(player, 'y', 'getPlayerInfo() returns y')
+      assert.property(player, 'sizeX', 'getPlayerInfo() returns sizeX')
+      assert.property(player, 'sizeY', 'getPlayerInfo() returns sizeY')
+      assert.property(player, 'vx', 'getPlayerInfo() returns vx')
+      assert.property(player, 'vy', 'getPlayerInfo() returns vy')
+      assert.property(player, 'speed', 'getPlayerInfo() returns speed')
+      assert.property(player, 'color', 'getPlayerInfo() returns color')
+
       done()
     })
 
