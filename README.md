@@ -2,3 +2,6 @@
 [![Build Status](https://travis-ci.org/z3t0/instant-server.svg?branch=master)](https://travis-ci.org/z3t0/instant-server)
 # instant-client
 fast multiplayer game client
+
+## credits
+Copyright (c) 2017 Rafi Khan
