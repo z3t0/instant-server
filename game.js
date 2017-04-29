@@ -59,18 +59,18 @@ class Game {
     var newPlayer = new Player(wrapper)
     this.players[newPlayer.id] = newPlayer
 
-    client.emit('registered', newPlayer.getPlayerInfo())
+    wrapper.emit('registered', newPlayer.getPlayerInfo())
     this.log('Player connected: ' + newPlayer.id)
 
-    this.sendToAll('newPlayer', newPlayer.getPlayerInfo(), client)
+    this.sendToAll('newPlayer', newPlayer.getPlayerInfo(), newPlayer.id)
   }
 
   sendToAll (msg, data, except) {
     // debugger;
     for (var id in this.players) {
-      if (this.players[id].client !== except) {
+      if (this.players[id] !== except) {
         console.log('sending: ' + msg)
-        this.players[id].client.emit(msg, data)
+        this.players[id].emit(msg, data)
       }
     }
   }
