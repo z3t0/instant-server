@@ -2,31 +2,38 @@ var http = require('http')
 var socket = require('socket.io')
 var EventEmitter = require('eventemitter3')
 
-function Server (opts, game) {
+function Server (opts) {
   this.http = http.createServer()
   this.io = socket(this.http)
 
   this.emitter = new EventEmitter()
-  this.game = game
 
   this.port = opts.port || 3000
 
   this.io.on('connection', (client) => {
-    this.emitter.emit('connect', client)
+    var wrapper = {}
 
-    client.on('left', (data) => {
+    wrapper.emit = (msg, data) => {
+      client.emit(msg, data)
+    }
+
+    wrapper.id = client.id
+
+    this.emitter.emit('connect', wrapper)
+
+    client.on('left', () => {
       this.emitter.emit('left', client.id)
     })
 
-    client.on('right', (data) => {
+    client.on('right', () => {
       this.emitter.emit('right', client.id)
     })
 
-    client.on('up', (data) => {
+    client.on('up', () => {
       this.emitter.emit('up', client.id)
     })
 
-    client.on('down', (data) => {
+    client.on('down', () => {
       this.emitter.emit('down', client.id)
     })
 

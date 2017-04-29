@@ -8,7 +8,7 @@
     "start": "./node_modules/.bin/nodemon main.js",
     "debug": "./node_modules/.bin/nodemon debug main.js",
     "coverage": "nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls",
-    "report": "nyc report --reporter=html npm test && open ./coverage/index.html" 
+    "report": "nyc report --reporter=html npm test && open ./coverage/index.html"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
-    "nyc": "^10.2.0"
+    "nyc": "^10.2.0",
+    "sinon": "^2.1.0"
   }
 }

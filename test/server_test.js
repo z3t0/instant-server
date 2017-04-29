@@ -3,16 +3,12 @@ var io = require('socket.io-client')
 
 const Server = require('../server.js')
 var client = null
+var wrapper = null
 
 describe('Server', function () {
   var server = new Server({port: 3000})
 
   describe('constructor', function () {
-    it(`should have 'game' property`, function (done) {
-      assert.property(server, 'game')
-      done()
-    })
-
     it(`should have 'io' property`, function (done) {
       assert.property(server, 'io')
       done()
@@ -40,6 +36,9 @@ describe('Server', function () {
 
       client = io.connect('http://localhost:3000')
       server.emitter.on('connect', (data) => {
+        wrapper = data
+        assert.typeOf(wrapper, 'object', `wrapper returned is not 'object'`)
+        assert.typeOf(wrapper.emit, 'function', `wrapper.emit is not  'function'`)
         done()
       })
     })
@@ -79,6 +78,15 @@ describe('Server', function () {
         done()
       })
     })
+
+    it(`should be able to send data back through 'wrapper.emit(msg, data)'`, function(done) {
+      wrapper.emit('test', 1)
+      client.on('test', (data) => {
+        assert.equal(data, 1, `data received is not '1'`)
+        done()
+      })
+    })
+    
     it(`should receiver 'disconnect' event`, function (done) {
       this.timeout(1000)
 
@@ -87,5 +95,6 @@ describe('Server', function () {
         done()
       })
     })
+
   })
 })
